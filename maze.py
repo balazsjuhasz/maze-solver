@@ -1,5 +1,5 @@
 import time
-from typing import List
+from typing import List, Optional
 
 from cell import Cell
 from drawing import Point, Window
@@ -14,7 +14,7 @@ class Maze:
         num_cols: int,
         cell_size_x: int,
         cell_size_y: int,
-        win: Window,
+        win: Optional[Window] = None,
     ):
         self._cells: List[List[Cell]] = []
         self._x1 = x1
@@ -53,5 +53,8 @@ class Maze:
         self._animate()
 
     def _animate(self):
+        if self._win is None:
+            return
+
         self._win.redraw()
         time.sleep(0.05)

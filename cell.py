@@ -1,10 +1,16 @@
 from __future__ import annotations
+from typing import Optional
 
 from drawing import Line, Point, Window
 
 
 class Cell:
-    def __init__(self, top_left: Point, bottom_right: Point, win: Window):
+    def __init__(
+        self,
+        top_left: Point,
+        bottom_right: Point,
+        win: Optional[Window] = None,
+    ):
         self.has_left_wall: bool = True
         self.has_right_wall: bool = True
         self.has_top_wall: bool = True
@@ -16,6 +22,9 @@ class Cell:
         self._win = win
 
     def draw(self):
+        if self._win is None:
+            return
+
         if self.has_left_wall:
             self._win.draw_line(
                 Line(
@@ -50,6 +59,9 @@ class Cell:
             )
 
     def draw_move(self, to_cell: Cell, undo: bool = False):
+        if self._win is None:
+            return
+
         center_x = (self._x1 + self._x2) // 2
         center_y = (self._y1 + self._y2) // 2
         other_center_x = (to_cell._x1 + to_cell._x2) // 2
