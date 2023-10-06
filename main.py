@@ -20,5 +20,6 @@ if __name__ == "__main__":
         cell_size_y,
         win,
     )
+    maze.solve()
 
     win.wait_for_close()
