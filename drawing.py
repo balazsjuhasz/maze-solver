@@ -1,4 +1,4 @@
-from tkinter import Tk, Canvas
+from tkinter import BOTH, Canvas, Tk
 
 
 class Point:
@@ -28,8 +28,13 @@ class Window:
         self._root = Tk()
         self._root.title("Maze Solver")
         self._root.protocol("WM_DELETE_WINDOW", self.close)
-        self._canvas = Canvas(self._root, width=width, height=height)
-        self._canvas.pack()
+        self._canvas = Canvas(
+            self._root,
+            bg="white",
+            width=width,
+            height=height,
+        )
+        self._canvas.pack(fill=BOTH, expand=1)
         self._is_running = False
 
     def redraw(self):
