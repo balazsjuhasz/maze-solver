@@ -11,6 +11,7 @@ class Cell:
         bottom_right: Point,
         win: Optional[Window] = None,
     ):
+        self.visited: bool = False
         self.has_left_wall: bool = True
         self.has_right_wall: bool = True
         self.has_top_wall: bool = True

@@ -1,3 +1,4 @@
+import random
 import time
 from typing import List, Optional
 
@@ -15,6 +16,7 @@ class Maze:
         cell_size_x: int,
         cell_size_y: int,
         win: Optional[Window] = None,
+        seed: Optional[int] = None,
     ):
         self._cells: List[List[Cell]] = []
         self._x1 = x1
@@ -24,9 +26,12 @@ class Maze:
         self._cell_size_x = cell_size_x
         self._cell_size_y = cell_size_y
         self._win = win
+        if seed is not None:
+            random.seed(seed)
 
         self._create_cells()
         self._break_entrance_and_exit()
+        self._break_walls_r(0, 0)
 
     def _create_cells(self):
         self._cells = []
@@ -68,3 +73,41 @@ class Maze:
         exit_cell = self._cells[self._num_cols - 1][self._num_rows - 1]
         exit_cell.has_bottom_wall = False
         exit_cell.draw()
+
+    def _break_walls_r(self, x, y):
+        actual_cell = self._cells[x][y]
+        actual_cell.visited = True
+        while True:
+            possible_directions: List[Point] = []
+            # Left neighbor
+            if x > 0 and not self._cells[x - 1][y].visited:
+                possible_directions.append(Point(x - 1, y))
+            # Right neighbor
+            if x < self._num_cols - 1 and not self._cells[x + 1][y].visited:
+                possible_directions.append(Point(x + 1, y))
+            # Top neighbor
+            if y > 0 and not self._cells[x][y - 1].visited:
+                possible_directions.append(Point(x, y - 1))
+            # Bottom neighbor
+            if y < self._num_rows - 1 and not self._cells[x][y + 1].visited:
+                possible_directions.append(Point(x, y + 1))
+
+            if not possible_directions:
+                self._draw_cell(x, y)
+                return
+
+            next_loc = random.choice(possible_directions)
+            next_cell = self._cells[next_loc.x][next_loc.y]
+            if next_loc.x < x:
+                actual_cell.has_left_wall = False
+                next_cell.has_right_wall = False
+            elif next_loc.x > x:
+                actual_cell.has_right_wall = False
+                next_cell.has_left_wall = False
+            elif next_loc.y < y:
+                actual_cell.has_top_wall = False
+                next_cell.has_bottom_wall = False
+            else:
+                actual_cell.has_bottom_wall = False
+                next_cell.has_top_wall = False
+            self._break_walls_r(next_loc.x, next_loc.y)
