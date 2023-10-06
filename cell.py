@@ -10,7 +10,7 @@ class Cell:
         top_left: Point,
         bottom_right: Point,
         win: Optional[Window] = None,
-    ):
+    ) -> None:
         self.visited: bool = False
         self.has_left_wall: bool = True
         self.has_right_wall: bool = True
@@ -22,7 +22,7 @@ class Cell:
         self._y2 = bottom_right.y
         self._win = win
 
-    def draw(self):
+    def draw(self) -> None:
         if self._win is None:
             return
 
@@ -62,7 +62,7 @@ class Cell:
             "black" if self.has_bottom_wall else "white",
         )
 
-    def draw_move(self, to_cell: Cell, undo: bool = False):
+    def draw_move(self, to_cell: Cell, undo: bool = False) -> None:
         if self._win is None:
             return
 
